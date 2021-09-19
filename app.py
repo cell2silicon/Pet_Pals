@@ -6,6 +6,19 @@ from flask import (
     jsonify,
     request,
     redirect)
+ 
+from sqlalchemy import create_engine
+from sqlalchemy.ext.automap import automap_base
+
+engine = create_engine("sqlite:///db.sqlite")
+
+# reflect an existing database into a new model
+Base = automap_base()
+# reflect the tables
+Base.prepare(engine, reflect=True)
+
+# Save reference to the table
+Pet = Base.classes.pets
 
 #################################################
 # Flask Setup
@@ -16,15 +29,15 @@ app = Flask(__name__)
 # Database Setup
 #################################################
 
-from flask_sqlalchemy import SQLAlchemy
-app.config['SQLALCHEMY_DATABASE_URI'] = os.environ.get('DATABASE_URL', '') or "sqlite:///db.sqlite"
+# from flask_sqlalchemy import SQLAlchemy
+# app.config['SQLALCHEMY_DATABASE_URI'] = os.environ.get('DATABASE_URL', '') or "sqlite:///db.sqlite"
 
 # Remove tracking modifications
-app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
+# app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 
-db = SQLAlchemy(app)
+# db = SQLAlchemy(app)
 
-from .models import Pet
+# from .models import Pet
 
 
 # create route that renders index.html template
